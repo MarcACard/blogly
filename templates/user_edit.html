@@ -1,0 +1,33 @@
+<!-- USER EDIT is visible on /user/{user-id}/edit path. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <div>
+    <!-- <img href="{{user.image_url}}"> -->
+  </div>
+
+  <h2>
+    Edit User: {{user.first_name}} {{user.last_name}}
+  </h2>
+
+  <!-- Edit User Date Form -->
+  <form action="/users/{{user.id}}/edit" method="post">
+    <div>
+      <label for="first_name">First Name</label>
+      <input id="first_name" name="first_name" type="text" value="{{user.first_name}}">
+    </div>
+    <div>
+      <label for="last_name">Last Name</label>
+      <input id="last_name" name="last_name" type="text" value="{{user.last_name}}">
+    </div>
+    <div>
+      <label for="image_url">Image URL</label>
+      <input id="image_url" name="image_url" type="text" value="{{user.image_url}}">
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save">
+    <a href="/users/{{user.id}}" class="btn btn-secondary">Discard Changes</a>
+  </form>
+</div>
+{% endblock %}

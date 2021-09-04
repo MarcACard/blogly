@@ -1,0 +1,22 @@
+<!-- USER FORM is visible on the /users/new path. Form is used to create new users. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<!-- NEW USER SUBMISSION FORM-->
+<form action="/users/new" method="post">
+  <div>
+    <label for="first_name">First Name</label>
+    <input id="first_name" name="first_name" type="text" placeholder="Enter a First Name">
+  </div>
+  <div>
+    <label for="last_name">Last Name</label>
+    <input id="last_name" name="last_name" type="text" placeholder="Enter a Last Name">
+  </div>
+  <div>
+    <label for="image_url">Image URL</label>
+    <input id="image_url" name="image_url" type="text" placeholder="Provide an image for this user">
+  </div>
+  <input type="submit" value="submit">
+</form>
+{% endblock %}

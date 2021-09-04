@@ -1,0 +1,24 @@
+<!-- USER DETAILS is visble on /user/{user_id} path. Display all user profile information. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex flex-row">
+  <div>
+    {% if user.image_url == "" %}
+    <img src="/static/default-photo.png" class="img-thumbnail" style="height: 200px">
+    {% else %}
+    <img src="{{user.image_url}}" class="img-thumbnail">
+    {% endif %}
+  </div>
+  <div>
+    <h2>
+      {{user.first_name}} {{user.last_name}}
+    </h2>
+    <form>
+      <button formmethod="GET" formaction="/users/{{user.id}}/edit" class="btn btn-primary">Edit</button>
+      <button formmethod="POST" formaction="/users/{{user.id}}/delete" class="btn btn-danger">Delete</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
