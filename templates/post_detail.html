@@ -1,0 +1,26 @@
+<!-- POST DETAIL is visble on /post/{post_id} path. Displays all details of a post. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<article>
+  <h1>{{post.title}}</h1>
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div>
+      <span class="small">{{post.created_at}}</span>
+    </div>
+    <div>
+      <form>
+        <a href="/posts/{{post.id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+        <button formmethod="POST" formaction="/posts/{{post.id}}/delete" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <p>
+    {{post.content}}
+  </p>
+  <p>By <a href="/users/{{post.user_id}}">{{post.user.first_name}} {{post.user.last_name}}</a></p>
+</article>
+
+{% endblock %}

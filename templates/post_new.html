@@ -1,0 +1,23 @@
+<!-- POST NEW is visble on /user/{user_id} path. Displays a form for post submission. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Add Post for {{user.first_name + ' ' + user.last_name}} </h1>
+
+<!-- NEW POST SUBMISSION FORM-->
+<form action="/users/{{user.id}}/posts/new" method="post">
+  <label class="input-group mb-3" for="title">
+    <span class="input-group-text">Title</span>
+    <input class="form-control" id="title" name="title" type="text">
+  </label>
+  <label class="input-group mb-3" for="content">
+    <span class="input-group-text">Content</span>
+    <textarea class="form-control" id="content" name="content"></textarea>
+  </label>
+  <div class="d-flex flex-row-reverse">
+    <a href="/users/{{user.id}}" class="btn btn-info ms-1">Cancel</a>
+    <button type="submit" class="btn btn-success">Add</button>
+  </div>
+</form>
+{% endblock %}

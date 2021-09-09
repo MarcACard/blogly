@@ -21,7 +21,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=True)
-    image_url = db.Column(db.String(), default="REPLACE w/ DEFAULT IMG URL")
+    image_url = db.Column(db.String(), default="/static/default-photo.png")
 
     posts = db.relationship("Post", backref="user")
 

@@ -12,27 +12,29 @@
 
 <body>
   <div class="container">
-    <!-- HEADER NAV -->
-    <h1><a href="/">Blogly</a></h1>
-  </div>
+    <div>
+      <!-- HEADER NAV -->
+      <h1><a href="/">Blogly</a></h1>
+    </div>
 
-  <!-- ALERTS BANNER -->
-  <div>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <ul>
+    <!-- ALERTS BANNER -->
+    <div class="d-flex justify-content-center">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
       {% for (category, message) in messages %}
-      <li>{{ message }}</li>
+      <div class="alert alert-primary text-center py-1 w-50" role="alert">
+        {{ message }}
+      </div>
       {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith%}
-  </div>
+      {% endif %}
+      {% endwith%}
+    </div>
 
-  <!-- PRIMARY PAGE CONTENT -->
-  <div class="container">
-    {% block content %}
-    {% endblock %}
+    <!-- PRIMARY PAGE CONTENT -->
+    <div>
+      {% block content %}
+      {% endblock %}
+    </div>
   </div>
 </body>
 

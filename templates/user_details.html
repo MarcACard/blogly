@@ -3,22 +3,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="d-flex flex-row">
-  <div>
+<div class="row">
+  <div class="col-3">
     {% if user.image_url == "" %}
     <img src="/static/default-photo.png" class="img-thumbnail" style="height: 200px">
     {% else %}
     <img src="{{user.image_url}}" class="img-thumbnail">
     {% endif %}
   </div>
-  <div>
-    <h2>
+  <div class="col">
+    <h1>
       {{user.first_name}} {{user.last_name}}
-    </h2>
-    <form>
-      <button formmethod="GET" formaction="/users/{{user.id}}/edit" class="btn btn-primary">Edit</button>
-      <button formmethod="POST" formaction="/users/{{user.id}}/delete" class="btn btn-danger">Delete</button>
-    </form>
+    </h1>
+    <div class="mb-3">
+      <form>
+        <button formmethod="GET" formaction="/users/{{user.id}}/edit" class="btn btn-primary btn-sm">Edit</button>
+        <button formmethod="POST" formaction="/users/{{user.id}}/delete" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+    <div>
+      <h2>Posts</h2>
+      <ul>
+        {% for post in posts %}
+        <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div>
+      <a href="/users/{{user.id}}/posts/new" class="btn btn-primary">Add Post</a>
+    </div>
   </div>
 </div>
 {% endblock %}

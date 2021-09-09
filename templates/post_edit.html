@@ -1,0 +1,24 @@
+<!-- POST EDIT is visble on /post/{post_id}/edit path. Displays a form for editing posts. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Edit Post</h1>
+
+<!-- NEW POST SUBMISSION FORM-->
+<form action="/posts/{{post.id}}/edit" method="post">
+  <label class="input-group mb-3" for="title">
+    <span class="input-group-text">Title</span>
+    <input class="form-control" id="title" name="title" type="text" value="{{post.title}}">
+  </label>
+  <label class="input-group mb-3" for="content">
+    <span class="input-group-text">Content</span>
+    <textarea class="form-control" id="content" name="content">{{post.content}}</textarea>
+  </label>
+  <div class="d-flex flex-row-reverse">
+    <button type="submit" class="btn btn-success ms-1">Edit</button>
+    <a href="/posts/{{post.id}}" class="btn btn-outline-primary">Cancel</a>
+
+  </div>
+</form>
+{% endblock %}
