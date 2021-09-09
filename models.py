@@ -13,7 +13,7 @@ def connect_db(app):
 
 
 class User(db.Model):
-    """User."""
+    """User Model"""
 
     __tablename__ = "users"
 
@@ -21,3 +21,23 @@ class User(db.Model):
     first_name = db.Column(db.String(80), nullable=False)
     last_name = db.Column(db.String(80), nullable=True)
     image_url = db.Column(db.String(), default="REPLACE w/ DEFAULT IMG URL")
+
+    posts = db.relationship("Post", backref="user")
+
+    def __repr__(self):
+        return f"<User {self.first_name} {self.last_name}>"
+
+
+class Post(db.Model):
+    """Post Model"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.Text(), nullable=False)
+    content = db.Column(db.Text(), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+
+    def __repr__(self):
+        return f"<Post {self.id} | {self.title}>"
