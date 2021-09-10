@@ -7,7 +7,7 @@
   <h1>{{post.title}}</h1>
   <div class="d-flex justify-content-between align-items-center mb-2">
     <div>
-      <span class="small">{{post.created_at}}</span>
+      <span class="small">{{post.created_at.strftime('%a %b %d, %Y - %-I:%I %p %Z')}}</span>
     </div>
     <div>
       <form>

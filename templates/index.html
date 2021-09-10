@@ -1,0 +1,17 @@
+<!-- index is visble on /. Displays 5 most recent posts. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Recent Posts</h1>
+<div>
+  {% for post in posts %}
+  <div>
+    <h3><a href="/posts/{{post.id}}">{{post.title}}</a></h3>
+    <p>{{post.content | truncate(250, '...')}}</p>
+    <p class="small">By <a href="/users/{{post.user_id}}">{{post.user.first_name}} {{post.user.last_name}}</a> |
+      {{post.created_at.strftime('%a %b %d, %Y')}}</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -18,9 +18,11 @@ connect_db(app)
 @app.route("/")
 def index():
     """Home Page"""
-    # TODO: Fix in later exercises
-    flash("This is a test", "message")
-    return redirect("/users")
+
+    # TODO: Get 5 most recent posts
+    posts = Post.query.order_by(Post.created_at.desc()).limit(5)
+
+    return render_template("index.html", posts=posts)
 
 
 @app.errorhandler(404)
