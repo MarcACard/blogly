@@ -23,7 +23,7 @@ class User(db.Model):
     last_name = db.Column(db.String(80), nullable=True)
     image_url = db.Column(db.String(), default="/static/default-photo.png")
 
-    posts = db.relationship("Post", backref="user")
+    posts = db.relationship("Post", cascade="all, delete-orphan", backref="user")
 
     def __repr__(self):
         return f"<User {self.first_name} {self.last_name}>"
