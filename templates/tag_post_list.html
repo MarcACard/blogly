@@ -1,0 +1,27 @@
+<!-- TAG LIST is visible on /tags path. Display all tags. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <div class="d-flex justify-content-between align-items-center">
+    <div>
+      <h1>Tag: {{tag.name}}</h1>
+    </div>
+    <div>
+      <form>
+        <a href="/tags/{{tag.id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+        <button formmethod="POST" formaction="/tags/{{tag.id}}/delete" class="btn btn-danger btn-sm">Delete</button>
+      </form>
+    </div>
+  </div>
+
+  <h2>Posts</h2>
+  <ul>
+    {% for post in posts %}
+    <li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
+    {% endfor %}
+  </ul>
+
+</div>
+{% endblock %}

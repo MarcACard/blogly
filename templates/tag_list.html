@@ -1,0 +1,15 @@
+<!-- TAG LIST is visible on /tags path. Display all tags. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <h1>Tags</h1>
+  <ul>
+    {% for tag in tags %}
+    <li><a href="/tags/{{tag.id}}">{{tag.name}}</a></li>
+    {% endfor %}
+  </ul>
+  <a href="/tags/new" class="btn btn-primary">Add Tag</a>
+</div>
+{% endblock %}

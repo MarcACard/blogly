@@ -1,4 +1,4 @@
-<!-- POST DETAIL is visble on /post/{post_id} path. Displays all details of a post. -->
+<!-- POST DETAIL is visible on /post/{post_id} path. Displays all details of a post. -->
 
 {% extends "base.html" %}
 
@@ -16,11 +16,15 @@
       </form>
     </div>
   </div>
-
   <p>
     {{post.content}}
   </p>
   <p>By <a href="/users/{{post.user_id}}">{{post.user.first_name}} {{post.user.last_name}}</a></p>
+  <div>
+    {% for tag in tags %}
+    <a href="/tags/{{tag.id}}" class="btn btn-primary btn-sm">{{tag.name}}</a>
+    {% endfor %}
+  </div>
 </article>
 
 {% endblock %}

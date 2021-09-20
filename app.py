@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, PostTag, Tag
 
 
 app = Flask(__name__)
@@ -19,7 +19,6 @@ connect_db(app)
 def index():
     """Home Page"""
 
-    # TODO: Get 5 most recent posts
     posts = Post.query.order_by(Post.created_at.desc()).limit(5)
 
     return render_template("index.html", posts=posts)
@@ -30,8 +29,9 @@ def page_not_found(error):
     return render_template("404.html"), 404
 
 
-#####################
+######################
 # === User Routes ===
+######################
 
 
 @app.route("/users")
@@ -119,6 +119,7 @@ def user_delete(user_id):
 
 #####################
 # === Post Routes ===
+#####################
 
 
 @app.route("/users/<int:user_id>/posts/new")
@@ -126,18 +127,20 @@ def new_post(user_id):
     """Display a form to enable to a users to submit a post."""
     # TODO: Create Template for Route
     user = User.query.get(user_id)
+    tags = Tag.query.all()
 
-    return render_template("post_new.html", user=user)
+    return render_template("post_new.html", user=user, tags=tags)
 
 
 @app.route("/users/<int:user_id>/posts/new", methods=["POST"])
 def create_post(user_id):
     """Process a new post form submission"""
-    # TODO:  Process Form
     title = request.form["title"]
     content = request.form["content"]
+    tag_ids = request.form.getlist("tag", int)
+    tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
-    new_post = Post(title=title, content=content, user_id=user_id)
+    new_post = Post(title=title, content=content, user_id=user_id, tags=tags)
 
     db.session.add(new_post)
     db.session.commit()
@@ -151,16 +154,18 @@ def create_post(user_id):
 def get_post(post_id):
     """Display a specified post"""
     post = Post.query.get_or_404(post_id)
+    tags = post.tags
 
-    return render_template("post_detail.html", post=post)
+    return render_template("post_detail.html", post=post, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit")
 def edit_post(post_id):
     """Open a form to enable a user to edit a post."""
     post = Post.query.get_or_404(post_id)
+    tags = Tag.query.all()
 
-    return render_template("post_edit.html", post=post)
+    return render_template("post_edit.html", post=post, tags=tags)
 
 
 @app.route("/posts/<int:post_id>/edit", methods=["POST"])
@@ -171,6 +176,8 @@ def update_post(post_id):
     # TODO: Validate Form Inputs
     new_title = request.form["title"]
     new_content = request.form["content"]
+    tag_ids = request.form.getlist("tag", int)
+    new_tags = Tag.query.filter(Tag.id.in_(tag_ids)).all()
 
     if post is None:
         flash(f"Attempted Changes Failed. Post {post_id} not found.", "error")
@@ -178,6 +185,7 @@ def update_post(post_id):
 
     post.title = new_title
     post.content = new_content
+    post.tags = new_tags
 
     db.session.add(post)
     db.session.commit()
@@ -197,3 +205,101 @@ def delete_post(post_id):
     flash("Post has been deleted.", "warning")
 
     return redirect(f"/users/{post.user_id}")
+
+
+####################
+# === Tag Routes ===
+####################
+
+
+@app.route("/tags")
+def get_tags():
+    """Show all tags on blog."""
+
+    tags = Tag.query.all()
+    return render_template("tag_list.html", tags=tags)
+
+
+@app.route("/tags/<int:tag_id>")
+def get_tag(tag_id):
+    """Show a tag and all posts with the Tag"""
+
+    tag = Tag.query.get_or_404(tag_id)
+    posts = tag.posts
+
+    return render_template("tag_post_list.html", tag=tag, posts=posts)
+
+
+@app.route("/tags/new")
+def new_tag():
+    """display a form to create a new Tag"""
+    return render_template("tag_add.html")
+
+
+@app.route("/tags/new", methods=["POST"])
+def create_tag():
+    """Process a new Tag if it doesn't already exist."""
+
+    tag_name = request.form["tag"].title()
+
+    if Tag.query.filter_by(name=tag_name).first() != None:
+        flash(f'Tag: "{tag_name}" already exists.', "error")
+        return redirect("/tags/new")
+
+    tag = Tag(name=tag_name)
+
+    db.session.add(tag)
+    db.session.commit()
+
+    flash(f"Tag: {tag_name.title()} was created", "message")
+
+    return redirect("/tags")
+
+
+@app.route("/tags/<int:tag_id>/edit")
+def edit_tag(tag_id):
+    """Display a form for a users to edit a tag"""
+    tag = Tag.query.get(tag_id)
+
+    if tag is None:
+        flash(f"Unable to find tag with ID: {tag_id}.", "error")
+        return redirect("/tags")
+
+    return render_template("tag_edit.html", tag=tag)
+
+
+# ?: Is there a recommended method to structure functions for multiple checks? My structure below prevents excessive nesting, but uncertain if there is a 'preferred' way to setup a route.
+@app.route("/tags/<int:tag_id>/edit", methods=["POST"])
+def update_tag(tag_id):
+    """Process a tag update."""
+    tag = Tag.query.get(tag_id)
+
+    if tag is None:
+        flash(f"Attempted Changes Failed. Tag ID: {tag_id} not found.", "error")
+        return redirect("/tags")
+
+    tag_name = request.form["tag"].title()
+
+    if Tag.query.filter_by(name=tag_name).first() != None:
+        flash(f'Tag: "{tag_name}" already exists.', "error")
+        return redirect(f"/tags/{tag_id}/edit")
+
+    tag.name = tag_name
+
+    db.session.add(tag)
+    db.session.commit()
+
+    flash("Tag Update Complete", "message")
+
+    return redirect(f"/tags/{tag_id}")
+
+
+@app.route("/tags/<int:tag_id>/delete", methods=["POST"])
+def delete_tag(tag_id):
+    tag = Tag.query.get_or_404(tag_id)
+    db.session.delete(tag)
+    db.session.commit()
+
+    flash("Tag has been deleted.", "warning")
+
+    return redirect(f"/tags")

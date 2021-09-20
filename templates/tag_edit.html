@@ -1,0 +1,20 @@
+<!-- TAG LIST is visible on /tags path. Display all tags. -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+  <h1>Edit Tag: {{tag.name}}</h1>
+  <!-- NEW POST SUBMISSION FORM-->
+  <form action="/tags/{{tag.id}}/edit" method="post">
+    <label class="input-group mb-3" for="tag">
+      <span class="input-group-text">Tag</span>
+      <input class="form-control" id="tag" name="tag" type="text" value="{{tag.name}}" required>
+    </label>
+    <div class="d-flex flex-row-reverse">
+      <a href="/tag/{{tag.id}}" class="btn btn-info ms-1">Cancel</a>
+      <button type="submit" class="btn btn-success">Add</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

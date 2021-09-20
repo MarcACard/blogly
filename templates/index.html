@@ -1,4 +1,4 @@
-<!-- index is visble on /. Displays 5 most recent posts. -->
+<!-- index is visible on /. Displays 5 most recent posts. -->
 
 {% extends "base.html" %}
 
@@ -6,11 +6,16 @@
 <h1>Recent Posts</h1>
 <div>
   {% for post in posts %}
-  <div>
-    <h3><a href="/posts/{{post.id}}">{{post.title}}</a></h3>
-    <p>{{post.content | truncate(250, '...')}}</p>
-    <p class="small">By <a href="/users/{{post.user_id}}">{{post.user.first_name}} {{post.user.last_name}}</a> |
-      {{post.created_at.strftime('%a %b %d, %Y')}}</p>
+  <div class="card mb-3">
+    <div class="card-body">
+      <h4 class="card-title"><a href="/posts/{{post.id}}">{{post.title}}</a></h4>
+      <p class="card-subtitle text-muted small">By <a href="/users/{{post.user_id}}">{{post.user.first_name}}
+          {{post.user.last_name}}</a>
+        |
+        {{post.created_at.strftime('%a %b %d, %Y')}}
+      </p>
+      <p class="card-text">{{post.content | truncate(300, '...')}}</p>
+    </div>
   </div>
   {% endfor %}
 </div>
